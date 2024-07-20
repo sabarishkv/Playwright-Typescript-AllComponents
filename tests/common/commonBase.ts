@@ -19,12 +19,55 @@ export class CommonBasePage {
   }
 
   async fillTextField(fieldLocator: Locator, testData: string): Promise<void> {
-    if (await fieldLocator.isVisible() && testData != null) {
+    if ((await fieldLocator.isVisible()) && testData != null) {
       await fieldLocator.fill(testData);
       console.log(`The ${fieldLocator} is filled with ${testData}`);
+    } else {
+      console.log(
+        `The ${fieldLocator} is not visible and${testData} is not entered`
+      );
     }
-    else{
-      console.log(`The ${fieldLocator} is not visible and${testData} is not entered`);
+  }
+  async slowScrollToBottomUsingScrollbar(
+    page: Page,
+    step: number,
+    delay: number
+  ): Promise<void> {
+    // Get the height of the scroll bar
+    const scrollBarHeight = await page.evaluate(
+      () => document.documentElement.clientHeight
+    );
+
+    let currentPosition = 0;
+    const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+
+    while (currentPosition < scrollHeight) {
+      currentPosition += step;
+
+      await page.mouse.move(scrollBarHeight - 5, currentPosition);
+      await page.mouse.down();
+      await page.mouse.move(scrollBarHeight - 5, currentPosition + step, {
+        steps: 10,
+      });
+      await page.mouse.up();
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  async slowScrollToBottomUsingArrowKey(
+    page: Page,
+    step: number,
+    delay: number
+  ): Promise<void> {
+    let currentPosition = 0;
+    const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+
+    while (currentPosition < scrollHeight) {
+      await page.keyboard.press("ArrowDown");
+      currentPosition += step;
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 }
