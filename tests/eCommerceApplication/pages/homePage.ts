@@ -1,19 +1,20 @@
-import exp from "constants";
 import { CommonBasePage } from "../../common/commonBase";
-import { expect } from "@playwright/test";
 
 export class HomePage extends CommonBasePage {
   homePageSpinner = () =>
     this.page.locator("//img[contains(@class,'loader-spinner')]");
 
-  pageSpinner = () => "//div/img[contains(@class,'loader-spinner')]";
+  productLoadSpinner = () => "//figure//img[contains(@class,'loader-spinner')]";
+  bannerLoadSpinner = () => "//a/img[contains(@class,'loader-spinner')]";
+
 
   async verifyPageLoadSpinner(): Promise<void> {
     
-    await this.page.waitForSelector(this.pageSpinner(),{state: 'hidden', timeout: 600 * 1000 })
-     let status: boolean = true;
+    await this.page.waitForSelector(this.productLoadSpinner(),{state: 'hidden', timeout: 600 * 1000 })
+   // await this.page.waitForSelector(this.bannerLoadSpinner(),{state: 'hidden', timeout: 600 * 1000 })
+     let loaderStatus: boolean = true;
 
-    if (status) {
+    if (loaderStatus) {
       console.log(
         `${this.homePageSpinner()} is hidden i.e page is loaded successful`
       );

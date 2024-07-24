@@ -18,8 +18,8 @@ test("Navigate to the E-commerce", async ({ page }) => {
 
   await test.step("Wait for Loader", async () => {
     await commonBase.slowScrollToBottomUsingArrowKey(page, step, delay);
+    await commonBase.slowScrollToTopUsingArrowKey(page, step, delay);
     await homePage.verifyPageLoadSpinner();
   });
 
-  await page.pause();
 });

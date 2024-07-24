@@ -70,4 +70,20 @@ export class CommonBasePage {
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
+
+  async slowScrollToTopUsingArrowKey(
+    page: Page,
+    step: number,
+    delay: number
+  ): Promise<void> {
+    let currentPosition = 0;
+    const scrollHeight = await page.evaluate(() => document.body.scrollHeight);
+
+    while (currentPosition < scrollHeight) {
+      await page.keyboard.press("ArrowUp");
+      currentPosition += step;
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
 }
